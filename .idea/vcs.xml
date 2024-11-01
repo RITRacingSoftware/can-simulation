@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/FreeRTOS-Kernel" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/STM32CubeG4" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/STM32CubeG4/Drivers/BSP/B-G474E-DPOW1" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/STM32CubeG4/Drivers/BSP/Components/Common" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/STM32CubeG4/Drivers/BSP/Components/hx8347d" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/STM32CubeG4/Drivers/BSP/Components/mfxstm32l152" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/STM32CubeG4/Drivers/BSP/Components/mt25ql512abb" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/STM32CubeG4/Drivers/BSP/Components/st7735" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/STM32CubeG4/Drivers/BSP/Components/stts751" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/STM32CubeG4/Drivers/BSP/Components/wm8994" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/STM32CubeG4/Drivers/BSP/STM32G474E-EVAL" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/STM32CubeG4/Drivers/BSP/STM32G4xx_Nucleo" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/STM32CubeG4/Drivers/CMSIS/Device/ST/STM32G4xx" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/STM32CubeG4/Drivers/STM32G4xx_HAL_Driver" vcs="Git" />
+  </component>
+</project>
