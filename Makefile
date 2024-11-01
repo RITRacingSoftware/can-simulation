@@ -1,4 +1,4 @@
-PROJECT_NAME := spin_test
+PROJECT_NAME := lora_telemetry
 PROJECT_VERSION := f33
 
 # Build info
