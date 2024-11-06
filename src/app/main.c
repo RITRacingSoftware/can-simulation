@@ -26,14 +26,14 @@ void heartbeat_task(void *pvParameters) {
         core_GPIO_toggle_heartbeat();
         strcpy(txbuf, "AT+SEND=18,16,AA55AA55AA55AA55\r\n");
         core_USART_transmit(USART1, txbuf, strlen(txbuf));
-        vTaskDelay(1000 * portTICK_PERIOD_MS);
+        vTaskDelay(5000 * portTICK_PERIOD_MS);
     }
 }
 
 int main(void) {
     HAL_Init();
 
-    // Drivers
+    // Hearbeat initialization utility
     core_heartbeat_init(GPIOA, GPIO_PIN_5); // GPIOA GPIO_PIN_5
     core_GPIO_set_heartbeat(GPIO_PIN_RESET);
 
