@@ -1,4 +1,4 @@
-# STM32G4xx Project Template (LORA TELEMETRY TESTING)
+# STM32G4xx Project Template (CAN TELEMETRY TESTING)
 
 ## Overview
 This is a Github template with everything needed to make a new STM32G4xx project from scratch.

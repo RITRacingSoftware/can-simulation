@@ -28,11 +28,6 @@ APP_SRCS := $(shell find $(APP_DIR) -type f -name "*.c")
 APP_INCLUDE := -I $(APP_DIR)
 STM32_APP_OBJS := $(APP_SRCS:$(APP_DIR)/%=$(STM32_BUILD_DIR)/obj/app/%.o)
 
-DRIVER_DIR := src/driver
-DRIVER_SRCS := $(shell find $(DRIVER_DIR) -type f -name "*.c")
-DRIVER_INCLUDE := -I $(DRIVER_DIR)
-STM32_DRIVER_OBJS := $(DRIVER_SRCS:$(DRIVER_DIR)/%=$(STM32_BUILD_DIR)/obj/driver/%.o)
-
 # Libraries
 STM32CUBE_DIR := lib/STM32CubeG4
 STM32CUBE_HAL_DIR := $(STM32CUBE_DIR)/Drivers/STM32G4xx_HAL_Driver
@@ -57,7 +52,6 @@ CORE_INCLUDES := -I $(CORE_DIR)/Inc $(STM32CUBE_INCLUDES) $(FREERTOS_INCLUDES)
 CORE_INCLUDES := $(foreach d, $(CORE_INCLUDES),-I $d)
 CORE_OBJS :=  $(CORE_SRCS:$(CORE_DIR)/%=$(STM32_BUILD_DIR)/obj/core/%.o)
 
-
 # Compilation targets
 .PHONY: all
 all: spin_test
@@ -79,11 +73,6 @@ $(STM32_BUILD_DIR)/obj/app/%.c.o: $(APP_DIR)/%.c
 	@[ -d $(@D) ] || mkdir -p $(@D)
 	$(STM32_CC) $(STM32_CC_FLAGS) -I src $(APP_INCLUDE) $(DRIVER_INCLUDE) $(FREERTOS_INCLUDES) $(CORE_INCLUDES) -c $< -o $@
 
-# driver objects
-$(STM32_BUILD_DIR)/obj/driver/%.c.o: $(DRIVER_DIR)/%.c
-	@[ -d $(@D) ] || mkdir -p $(@D)
-	$(STM32_CC) $(STM32_CC_FLAGS) -I src $(DRIVER_INCLUDE) $(STM32CUBE_INCLUDES) $(CORE_INCLUDES) -c $< -o $@
-
 # stm32cube objects
 $(STM32_BUILD_DIR)/obj/stm32cube/%.c.o: $(STM32CUBE_DIR)/%.c
 	@[ -d $(@D) ] || mkdir -p $(@D)
@@ -102,6 +91,7 @@ $(STM32_BUILD_DIR)/obj/freertos/%.c.o: $(FREERTOS_DIR)/%.c
 $(STM32_BUILD_DIR)/obj/core/%.c.o: $(CORE_DIR)/%.c
 	@[ -d $(@D) ] || mkdir -p $(@D)
 	$(STM32_CC) $(STM32_CC_FLAGS) -I src $(STM32CUBE_INCLUDES) $(CORE_INCLUDES) -c $< -o $@
+
 
 # Misc targets
 .PHONY: clean

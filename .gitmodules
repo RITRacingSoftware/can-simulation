@@ -7,3 +7,12 @@
 [submodule "lib/Core"]
 	path = lib/Core
 	url = git@github.com:RITRacingSoftware/Core.git
+[submodule "lib/Formula-Main-DBC"]
+	path = lib/Formula-Main-DBC
+	url = https://github.com/RITRacingSoftware/Formula-Main-DBC
+[submodule "lib/DASH"]
+	path = lib/DASH
+	url = https://github.com/RITRacingSoftware/DASH
+[submodule "src/driver/Formula-DBC"]
+	path = src/driver/Formula-DBC
+	url = https://github.com/RITRacingSoftware/Formula-DBC

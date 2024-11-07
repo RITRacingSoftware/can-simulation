@@ -18,40 +18,91 @@
 
 #include <stm32g4xx_hal.h>
 
-char txbuf[128];
+// TODO fix makefile imports for dbc include
+#include <formula_main_dbc.h>
 
 void heartbeat_task(void *pvParameters) {
     (void) pvParameters;
     while(true) {
         core_GPIO_toggle_heartbeat();
-        strcpy(txbuf, "AT+SEND=18,16,AA55AA55AA55AA55\r\n");
-        core_USART_transmit(USART1, txbuf, strlen(txbuf));
         vTaskDelay(5000 * portTICK_PERIOD_MS);
     }
 }
+/*
+ * TODO setup CAN event loop
+ *
+ *
+ */
+void can_read_task(void *pvParameters) {
+    (void) pvParameters;
+    while(true) {
+        struct formula_main_dbc_c70_tire_temps_t temps;
+        uint16_t t = 90; // 90c
+        temps.tire_temp_fl_max = t;
+        temps.tire_temp_fr_max = t;
+        temps.tire_temp_rl_max = t;
+        temps.tire_temp_rr_max = t;
+        uint8_t msg[8];
+        int sz = formula_main_dbc_c70_tire_temps_pack(&msg, &temps, 8);
+
+        core_CAN_add_message_to_tx_queue(FDCAN1, 1874, sz, &temps);
+
+        CanMessage_s reciever;
+
+        core_CAN_receive_from_queue(FDCAN1, &reciever);
+
+        struct formula_main_dbc_c70_tire_temps_t temps_reciever;
+
+        formula_main_dbc_c70_tire_temps_unpack(&temps_reciever, &reciever.data, &reciever.dlc);
+
+    }
+}
+
+// void can_transmit_task(void *pvParameters) {
+//     (void) pvParameters;
+//     while(true) {
+//
+//     }
+// }
 
 int main(void) {
     HAL_Init();
 
-    // Hearbeat initialization utility
-    core_heartbeat_init(GPIOA, GPIO_PIN_5); // GPIOA GPIO_PIN_5
     core_GPIO_set_heartbeat(GPIO_PIN_RESET);
 
     if (!core_clock_init()) error_handler();
-    if (!core_USART_init(USART1, 115200)) error_handler();
 
+    if (!core_CAN_init(FDCAN1)) error_handler();
 
-    int err = xTaskCreate(heartbeat_task,
-        "heartbeat",
-        1000,
-        NULL,
-        4,
-        NULL);
+    /*
+     * Initialize a new task on in the FreeRTOS runtime
+     * https://www.freertos.org/Documentation/02-Kernel/04-API-references/01-Task-creation/01-xTaskCreate
+     */
+    int err = xTaskCreate(
+        can_read_task, /* specified task handler */
+        "can_test_task", /* task name */
+        1000, /* allocated stack memory space for task */
+        NULL, /* parameters passed into task (none for now) */
+        1, /* RTOS Task CPU Scheduling Task Priority */
+        NULL /* closure for pre task running */
+    );
+    // Check to see if the RTOS task was successfully created
     if (err != pdPASS) {
         error_handler();
     }
 
-    NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
+    err = xTaskCreate(heartbeat_task,
+        "heartbeat", /* specified task handler */
+        1000, /* task name */
+        NULL, /* parameters passed into task (none for now) */
+        4,  /* RTOS Task CPU Scheduling Task Priority */
+        NULL /* closure for pre task running */
+        );
+
+    // Check to see if the RTOS task was successfully created
+    if (err != pdPASS) {
+        error_handler();
+    }
 
     // hand control over to FreeRTOS
     vTaskStartScheduler();
