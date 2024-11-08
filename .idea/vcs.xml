@@ -4,6 +4,7 @@
     <mapping directory="" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/lib/Core" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/lib/DASH" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/Formula-Main-DBC" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/lib/FreeRTOS-Kernel" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/lib/FreeRTOS-Kernel/portable/ThirdParty/Community-Supported-Ports" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/lib/FreeRTOS-Kernel/portable/ThirdParty/Partner-Supported-Ports" vcs="Git" />
@@ -20,6 +21,5 @@
     <mapping directory="$PROJECT_DIR$/lib/STM32CubeG4/Drivers/BSP/STM32G4xx_Nucleo" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/lib/STM32CubeG4/Drivers/CMSIS/Device/ST/STM32G4xx" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/lib/STM32CubeG4/Drivers/STM32G4xx_HAL_Driver" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/src/driver/Formula-DBC" vcs="Git" />
   </component>
 </project>

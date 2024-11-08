@@ -21,40 +21,65 @@
 // TODO fix makefile imports for dbc include
 #include <formula_main_dbc.h>
 
+// TODO
+/*
+ * 1. Make a RTOS task to continously send fake can data onto the RTOS queue
+ * 2. Make a function to get
+ *
+* /
+
+/*
+ * TODO setup CAN event loop
+ * TODO send data through TJA1042 transmitter and probe data
+ * Procedure
+ * 1. Send random CAN data onto the queue
+ * 2. Decode CAN data and attach ID
+ * CanMessage_s reciever;
+ * core_CAN_receive_from_queue(FDCAN1, &reciever);
+ * USART SEND reciever.id, + reciever.dlc, + reciever.data
+ */
+
 void heartbeat_task(void *pvParameters) {
     (void) pvParameters;
     while(true) {
         core_GPIO_toggle_heartbeat();
-        vTaskDelay(5000 * portTICK_PERIOD_MS);
+        vTaskDelay(1000 * portTICK_PERIOD_MS);
     }
 }
-/*
- * TODO setup CAN event loop
- *
- *
- */
+
+uint16_t test_unpack(void) {
+
+    // TYRE NODE
+    struct formula_main_dbc_c70_tire_temps_t server_temps;
+    CanMessage_s server_msg; // Instantiate can message buffer
+                             // temps -> (uint8_t*)client_msg.data
+    // 90c
+    server_temps.tire_temp_fl_max = 90;
+    server_temps.tire_temp_fr_max = 90;
+    server_temps.tire_temp_rl_max = 90;
+    server_temps.tire_temp_rr_max = 90;
+
+    int sz = formula_main_dbc_c70_tire_temps_pack((uint8_t*)server_msg.data, &server_temps, 8);
+
+    // TJA1042 CAN Transmitter
+    core_CAN_add_message_to_tx_queue(FDCAN1, 1874, sz, &server_msg.data);
+
+    CanMessage_s client_msg;
+    core_CAN_receive_from_queue(FDCAN1, &client_msg);
+
+
+    struct formula_main_dbc_c70_tire_temps_t client_temps;
+    formula_main_dbc_c70_tire_temps_unpack(&client_temps, client_msg.data, client_msg.dlc);
+
+
+    return client_temps.tire_temp_rl_max;
+
+}
+
 void can_read_task(void *pvParameters) {
     (void) pvParameters;
     while(true) {
-        struct formula_main_dbc_c70_tire_temps_t temps;
-        uint16_t t = 90; // 90c
-        temps.tire_temp_fl_max = t;
-        temps.tire_temp_fr_max = t;
-        temps.tire_temp_rl_max = t;
-        temps.tire_temp_rr_max = t;
-        uint8_t msg[8];
-        int sz = formula_main_dbc_c70_tire_temps_pack(&msg, &temps, 8);
-
-        core_CAN_add_message_to_tx_queue(FDCAN1, 1874, sz, &temps);
-
-        CanMessage_s reciever;
-
-        core_CAN_receive_from_queue(FDCAN1, &reciever);
-
-        struct formula_main_dbc_c70_tire_temps_t temps_reciever;
-
-        formula_main_dbc_c70_tire_temps_unpack(&temps_reciever, &reciever.data, &reciever.dlc);
-
+        test_unpack();
     }
 }
 
